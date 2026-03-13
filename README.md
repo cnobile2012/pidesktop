@@ -1,4 +1,4 @@
-pidesktop  V1.1.7
+pidesktop  V2.0.0
 =================
 This repository is a fork of the "offical" DIY Pi Desktop Case supporting software sold by http://www.element14.com sourced from Embest Technology Ltd. The case comes with a novel mSATA USB Disk, a power management solution, and real time clock integrated with the Raspberry Pi GPIO Connector.  Together they provide the missing mass storage, power management, and real time clock available in a typical desktop computer.
 

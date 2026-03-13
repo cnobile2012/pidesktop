@@ -1,29 +1,32 @@
 #
 # pidesktop
 #
-SCRIPT_PATH	= pidesktop-base/usr/share/pidesktop/script
-PYTHON_PATH	= pidesktop-base/usr/share/pidesktop/python
+PREFIX		= $(shell pwd)
+SCRIPT_PATH	= ${PREFIX}/pidesktop-base/usr/share/pidesktop/script
+PYTHON_PATH	= ${PREFIX}/pidesktop-base/usr/share/pidesktop/python
 SCRIPT_DEST	= /usr/share/pidesktop/script
 PYTHON_DEST	= /usr/share/pidesktop/python
 MAJORVERSION	= 2
 MINORVERSION	= 0
 PATCHLEVEL	= 0
 VERSION		= ${MAJORVERSION}.${MINORVERSION}.${PATCHLEVEL}
+APP_NAME	= pidesktop-base
+PACKAGE_NAME	= ${APP_NAME}-${VERSION}
 
 .PHONY	: pidesktop
 pidesktop: pidesktop-base.deb
 
 .PHONY	: pidesktop-base.deb
 pidesktop-base.deb: clean
-	dpkg -b pidesktop-base/ pidesktop-base-${VERSION}.deb
+	dpkg -b ${APP_NAME}/ ${PREFIX}/../${PACKAGE_NAME}.deb
 
-.PHONY	: clean
-clean: pidesktop-base.deb
-	@rm -f pidesktop-base-${VERSION}.deb
+.phony	: clean
+clean:
+	@rm -f ${PREFIX}/../${PACKAGE_NAME}.deb
 
 .PHONY	: install
 install: pidesktop-base.deb
-	@sudo dpkg -i pidesktop-base-${VERSION}.deb
+	@sudo dpkg -i ${PREFIX}/../${PACKAGE_NAME}.deb
 
 .PHONY	: test
 test:
@@ -35,4 +38,5 @@ test:
 	@cp ${PYTHON_PATH}/pd-shutdown.py ${PYTHON_DEST}
 
 uninstall:
-	sudo dpkg -r pidesktop-base
+	sudo dpkg -r ${PACKAGE_NAME}
+#	sudo rm /usr/share/pidesktop
