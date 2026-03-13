@@ -40,4 +40,3 @@ test:
 
 uninstall:
 	sudo dpkg -r ${PACKAGE_NAME}
-#	sudo rm /usr/share/pidesktop

@@ -141,29 +141,30 @@ def removeFakeHwclock():
 def updateHwclockSet() :
     filename = '/lib/udev/hwclock-set'
 
-    with open(filename,'r') as fr:
-        key = '-e /run/systemd/system'
-        update = False
-        doUpdate = False
-        lines = fr.readlines()
-        newValue = ''
+    if os.path.exists(filename):
+        with open(filename,'r') as fr:
+            key = '-e /run/systemd/system'
+            update = False
+            doUpdate = False
+            lines = fr.readlines()
+            newValue = ''
 
-        for line in lines:
-            if line and line.strip().startswith('if') and line.count(key):
-                update = True
-                doUpdate = True
+            for line in lines:
+                if line and line.strip().startswith('if') and line.count(key):
+                    update = True
+                    doUpdate = True
 
-            if update:
-                newValue += '#'
+                if update:
+                    newValue += '#'
 
-            if line and line.strip() == 'fi':
-                update = False
+                if line and line.strip() == 'fi':
+                    update = False
 
-            newValue += line;
+                newValue += line;
 
-        if doUpdate :
-            with open(filename,'wb') as fw:
-                fw.write(newValue)
+            if doUpdate:
+                with open(filename,'wb') as fw:
+                    fw.write(newValue)
 
 
 if __name__ == "__main__":
