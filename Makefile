@@ -18,7 +18,8 @@ pidesktop: pidesktop-base.deb
 
 .PHONY	: pidesktop-base.deb
 pidesktop-base.deb: clean
-	dpkg -b ${APP_NAME}/ ${PREFIX}/../${PACKAGE_NAME}.deb
+	@dpkg-deb --build --root-owner-group ${APP_NAME}/ \
+                  ${PREFIX}/../${PACKAGE_NAME}.deb
 
 .phony	: clean
 clean:
