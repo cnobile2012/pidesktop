@@ -141,7 +141,7 @@ def removeFakeHwclock():
 def updateHwclockSet() :
     filename = '/lib/udev/hwclock-set'
 
-    with = open(filename,'rb') as fr:
+    with open(filename,'rb') as fr:
         key = '-e /run/systemd/system'
         update = False
         doUpdate = False
