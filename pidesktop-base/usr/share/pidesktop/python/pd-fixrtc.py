@@ -35,7 +35,7 @@ def updategpio6():
     key = 'gpio'
     value = '6=op,pn,dl'
 
-    with open(filename, 'rb') as fr:
+    with open(filename, 'r') as fr:
         lines = fr.readlines()
         update = 0
         newValue = ''
@@ -57,7 +57,7 @@ def updategpio6():
             if update == 0:
                 newValue += '\r\n' + key + '=' + value
 
-            with open(filename, 'wb') as fw:
+            with open(filename, 'w') as fw:
                 fw.write(newValue)
 
 
@@ -66,7 +66,7 @@ def updategpio13():
     key = 'gpio'
     value = '13=ip'
 
-    with open(filename,'rb') as fr:
+    with open(filename,'r') as fr:
         lines = fr.readlines()
         update = 0
         newValue = ''
@@ -141,7 +141,7 @@ def removeFakeHwclock():
 def updateHwclockSet() :
     filename = '/lib/udev/hwclock-set'
 
-    with open(filename,'rb') as fr:
+    with open(filename,'r') as fr:
         key = '-e /run/systemd/system'
         update = False
         doUpdate = False
