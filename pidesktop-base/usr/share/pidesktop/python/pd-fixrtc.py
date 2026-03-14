@@ -126,7 +126,7 @@ def removeFakeHwclock():
     command = 'sudo systemctl status fake-hwclock.service'
     # Split command string into list (safer than shell=True)
     cmd_list = shlex.split(command) if isinstance(command, str) else command
-    
+
     with Popen(cmd_list, stdout=PIPE, stderr=PIPE,
                text=True, bufsize=1) as proc:
         for line in proc.stdout:

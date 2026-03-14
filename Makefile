@@ -6,6 +6,7 @@ SCRIPT_PATH	= ${PREFIX}/pidesktop-base/usr/share/pidesktop/script
 PYTHON_PATH	= ${PREFIX}/pidesktop-base/usr/share/pidesktop/python
 SCRIPT_DEST	= /usr/share/pidesktop/script
 PYTHON_DEST	= /usr/share/pidesktop/python
+
 MAJORVERSION	= 2
 MINORVERSION	= 0
 PATCHLEVEL	= 0
