@@ -8,7 +8,8 @@ solution, and real time clock integrated with the Raspberry Pi GPIO Connector.
 Together they provide the missing mass storage, power management, and real time
 clock available in a typical desktop computer.
 
-This current package fixes issues manly with new versions of Python
+This current package fixes issues mainly for new versions of Python. It was
+tested with Python 3.13.
 
 Key features of pidesktop:
 - Reliable reboot for mSATA SSD drives
