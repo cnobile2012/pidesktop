@@ -9,29 +9,34 @@ import subprocess
 
 print("pidesktop: power button service initializing")
 
+LED_PIN = 6      # BOARD 31
+BUTTON_PIN = 13  # BOARD 33
+
 chip = gpiod.Chip("/dev/gpiochip0")
 
-POWER_LED = 6      # GPIO6  (BOARD 31)
-POWER_BUTTON = 13  # GPIO13 (BOARD 33)
+# request LED output
+led_request = chip.request_lines(consumer="pidesktop-led", config={
+    LED_PIN: gpiod.LineSettings(direction=gpiod.LineDirection.OUTPUT)})
 
-led = chip.get_line(POWER_LED)
-button = chip.get_line(POWER_BUTTON)
+# request button interrupt
+button_request = chip.request_lines(consumer="pidesktop-button",config={
+    BUTTON_PIN: gpiod.LineSettings(direction=gpiod.LineDirection.INPUT,
+                                   edge_detection=gpiod.LineEdge.RISING)})
 
-led.request(consumer="pidesktop", type=gpiod.LINE_REQ_DIR_OUT)
-button.request(consumer="pidesktop", type=gpiod.LINE_REQ_EV_RISING_EDGE)
-
-# Blink to show Pi is alive
-led.set_value(0)
-led.set_value(1)
+# blink LED to show system alive
+led_request.set_value(LED_PIN, 0)
+led_request.set_value(LED_PIN, 1)
 time.sleep(0.5)
-led.set_value(0)
+led_request.set_value(LED_PIN, 0)
 
 print("pidesktop: power button monitor enabled")
 
 while True:
-    if button.event_wait():
-        event = button.event_read()
-        print("pidesktop: power button press detected")
-        subprocess.run(["sync"])
-        subprocess.run(["shutdown", "-h", "now"])
-        break
+    if button_request.wait_edge_events(timeout=None):
+        events = button_request.read_edge_events()
+
+        for event in events:
+            print("pidesktop: power button press detected")
+            subprocess.run(["sync"])
+            subprocess.run(["shutdown", "-h", "now"])
+            exit(0)
