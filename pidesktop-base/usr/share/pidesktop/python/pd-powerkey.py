@@ -2,6 +2,7 @@
 #
 # pd-powerkey.py - monitor GPIO to detect power key press from Power MCU (PCU)
 #
+
 import gpiod
 import time
 import os
@@ -38,3 +39,8 @@ def shutdown():
 
 
 print("pidesktop: power button monitor enabled")
+
+while True:
+    if button.event_wait(sec=10):
+        event = button.event_read()
+        shutdown()
