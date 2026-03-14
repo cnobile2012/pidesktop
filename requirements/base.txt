@@ -1,0 +1,5 @@
+pip
+ipython
+gpiod
+# This is the old GPIO API
+RPi.GPIO
