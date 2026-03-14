@@ -5,7 +5,7 @@ Before=reboot.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/python -u /usr/share/pidesktop/python/pd-reboot.py
+ExecStart=/usr/bin/python3 -u /usr/share/pidesktop/python/pd-reboot.py
 
 [Install]
 WantedBy=reboot.target

@@ -5,7 +5,7 @@ Before=shutdown.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/python -u /usr/share/pidesktop/python/pd-shutdown.py
+ExecStart=/usr/bin/python3 -u /usr/share/pidesktop/python/pd-shutdown.py
 
 [Install]
 WantedBy=shutdown.target

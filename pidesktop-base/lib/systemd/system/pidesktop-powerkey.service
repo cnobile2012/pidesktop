@@ -1,10 +1,11 @@
 [Unit]
-Description=pidesktop power button service
-After=local-fs.target
+Description=pidesktop Power Button service
+After=multi-user.target
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/python -u /usr/share/pidesktop/python/pd-powerkey.py
+ExecStart=/usr/bin/python3 -u /usr/share/pidesktop/python/pd-powerkey.py
+Restart=always
 
 [Install]
 WantedBy=multi-user.target

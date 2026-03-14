@@ -1,4 +1,4 @@
-#!/user/bin/env python
+#!/user/bin/env python3
 
 # pd-reboot.py - oneshot service so do your thing and exit
 #
