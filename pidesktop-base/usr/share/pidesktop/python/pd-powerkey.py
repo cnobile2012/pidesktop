@@ -2,38 +2,39 @@
 #
 # pd-powerkey.py - monitor GPIO to detect power key press from Power MCU (PCU)
 #
-
-import RPi.GPIO as GPIO
+import gpiod
 import time
 import os
 import sys
 
 print("pidesktop: power button service initializing")
 
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(31, GPIO.OUT)    # Pi to PCU - start/stop shutdown timer
-# PCU to Pi - detect power key pressed
-GPIO.setup(33, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.output(31, GPIO.LOW)   # tell PCU we are alive
-GPIO.output(31, GPIO.HIGH)  # cause blink by starting shutdown timer
+chip = gpiod.Chip("gpiochip0")
+
+POWER_LED = 6      # GPIO6  (BOARD 31)
+POWER_BUTTON = 13  # GPIO13 (BOARD 33)
+
+led = chip.get_line(POWER_LED)
+button = chip.get_line(POWER_BUTTON)
+
+led.request(consumer="pidesktop", type=gpiod.LINE_REQ_DIR_OUT)
+button.request(
+    consumer="pidesktop",
+    type=gpiod.LINE_REQ_EV_RISING_EDGE
+)
+
+# Blink to show Pi is alive
+led.set_value(0)
+led.set_value(1)
 time.sleep(0.5)
-GPIO.output(31, GPIO.LOW)   # clear timer we really are alive
+led.set_value(0)
 
 
-# callback function
-def powerkey_pressed(channels):
+def shutdown():
     print("pidesktop: power button press detected, initiating shutdown")
     os.system("sync")
     os.system("shutdown -h now")
     sys.exit()
 
 
-# wait for power key press
 print("pidesktop: power button monitor enabled")
-GPIO.add_event_detect(33, GPIO.RISING, callback=powerkey_pressed,
-                      bouncetime=200)
-
-# idle - TODO: use wait
-while True:
-    time.sleep(10)
