@@ -1,12 +1,12 @@
 pidesktop  V2.0.0
 =================
-This repository is a fork of a fork from hoopsurfer [pidesktop]
-(https://github.com/hoopsurfer/pidesktop). The offical DIY Pi Desktop Case
-supporting software sold by http://www.element14.com sourced from Embest
-Technology Ltd. The case comes with a novel mSATA USB Disk, a power management
-solution, and real time clock integrated with the Raspberry Pi GPIO Connector.
-Together they provide the missing mass storage, power management, and real time
-clock available in a typical desktop computer.
+This repository is a fork of a fork from hoopsurfer
+[pidesktop](https://github.com/hoopsurfer/pidesktop). The offical DIY Pi
+Desktop Case supporting software sold by http://www.element14.com sourced from
+Embest Technology Ltd. The case comes with a novel mSATA USB Disk, a power
+management solution, and real time clock integrated with the Raspberry Pi GPIO
+Connector. Together they provide the missing mass storage, power management,
+and real time clock available in a typical desktop computer.
 
 This current package fixes issues mainly for new versions of Python. It was
 tested with Python 3.13.
