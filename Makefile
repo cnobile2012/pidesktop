@@ -34,6 +34,7 @@ install: pidesktop-base.deb
 test:
 	@cp ${SCRIPT_PATH}/pd-check       ${SCRIPT_DEST}
 	@cp ${SCRIPT_PATH}/pd-clonessd    ${SCRIPT_DEST}
+	@cp ${SCRIPT_PATH}/pd-rtcsync     ${SCRIPT_DEST}
 	@cp ${PYTHON_PATH}/pd-bootssd.py  ${PYTHON_DEST}
 	@cp ${PYTHON_PATH}/pd-fixrtc.py   ${PYTHON_DEST}
 	@cp ${PYTHON_PATH}/pd-powerkey.py ${PYTHON_DEST}
