@@ -28,7 +28,7 @@ def powerkey_pressed(channels):
     os.system("shutdown -h now")
     sys.exit()
 
-    
+
 # wait for power key press
 print("pidesktop: power button monitor enabled")
 GPIO.add_event_detect(33,GPIO.RISING,callback=powerkey_pressed)
