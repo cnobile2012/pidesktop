@@ -4,8 +4,9 @@
 PREFIX		= $(shell pwd)
 SCRIPT_PATH	= ${PREFIX}/pidesktop-base/usr/share/pidesktop/script
 PYTHON_PATH	= ${PREFIX}/pidesktop-base/usr/share/pidesktop/python
-SCRIPT_DEST	= /usr/share/pidesktop/script
-PYTHON_DEST	= /usr/share/pidesktop/python
+PIDESKTOP_PATH	= /usr/share/pidesktop
+SCRIPT_DEST	= ${PIDESKTOP_PATH}/script
+PYTHON_DEST	= ${PIDESKTOP_PATH}/python
 
 MAJORVERSION	= 2
 MINORVERSION	= 0
@@ -31,17 +32,18 @@ install	: pidesktop-base.deb
 
 .PHONY	: test
 test	:
+	install -d ${PIDESKTOP_PATH}
 #       Service scripts
-	@cp ${SCRIPT_PATH}/pd-check       ${SCRIPT_DEST}
-	@cp ${SCRIPT_PATH}/pd-clonessd    ${SCRIPT_DEST}
-	@cp ${SCRIPT_PATH}/pd-rtcsync     ${SCRIPT_DEST}
+	install -m 775 ${SCRIPT_PATH}/pd-check       ${SCRIPT_DEST}
+	install -m 775 ${SCRIPT_PATH}/pd-clonessd    ${SCRIPT_DEST}
+	install -m 775 ${SCRIPT_PATH}/pd-rtcsync     ${SCRIPT_DEST}
 #       Python code
-	@cp ${PYTHON_PATH}/__init__.py    ${PYTHON_DEST}
-	@cp ${PYTHON_PATH}/pidesktop.py   ${PYTHON_DEST}
-	@cp ${PYTHON_PATH}/pd_bootssd.py  ${PYTHON_DEST}
-	@cp ${PYTHON_PATH}/pd_fixrtc.py   ${PYTHON_DEST}
-	@cp ${PYTHON_PATH}/pd_powerkey.py ${PYTHON_DEST}
-	@cp ${PYTHON_PATH}/pd_shutdown.py ${PYTHON_DEST}
+	install -m 775 ${PYTHON_PATH}/__init__.py    ${PYTHON_DEST}
+	install -m 775 ${PYTHON_PATH}/pidesktop.py   ${PYTHON_DEST}
+	install -m 775 ${PYTHON_PATH}/pd_bootssd.py  ${PYTHON_DEST}
+	install -m 775 ${PYTHON_PATH}/pd_fixrtc.py   ${PYTHON_DEST}
+	install -m 775 ${PYTHON_PATH}/pd_powerkey.py ${PYTHON_DEST}
+	install -m 775 ${PYTHON_PATH}/pd_shutdown.py ${PYTHON_DEST}
 
 uninstall:
 	sudo dpkg -r ${PACKAGE_NAME}
