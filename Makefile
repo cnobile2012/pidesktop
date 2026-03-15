@@ -32,7 +32,8 @@ install	: pidesktop-base.deb
 
 .PHONY	: test
 test	:
-	install -d ${PIDESKTOP_PATH}
+	install -d ${SCRIPT_DEST}
+	install -d ${PYTHON_DEST}
 #       Service scripts
 	install -m 775 ${SCRIPT_PATH}/pd-check       ${SCRIPT_DEST}
 	install -m 775 ${SCRIPT_PATH}/pd-clonessd    ${SCRIPT_DEST}
