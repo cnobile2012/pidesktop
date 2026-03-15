@@ -12,7 +12,12 @@
 # Note: The timer will reset when the Pi powers off so the only purpose
 # REALLY for doing this is to capture the current system time in the real
 # time clock.
+import os
+import sys
 
+PWD = os.path.abspath(__file__)
+BASE_DIR = os.path.dirname(PWD)
+sys.path.append(BASE_DIR)
 
 from .pidesktop import PiDesktop
 

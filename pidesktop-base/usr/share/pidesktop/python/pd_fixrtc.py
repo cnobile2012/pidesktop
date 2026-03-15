@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
 #
-# brute force
+# pd_fixrtc.py
 #
+import os
+import sys
+
+PWD = os.path.abspath(__file__)
+BASE_DIR = os.path.dirname(PWD)
+sys.path.append(BASE_DIR)
 
 from .pidesktop import PiDesktop
 
