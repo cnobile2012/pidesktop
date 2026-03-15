@@ -31,11 +31,13 @@ install	: pidesktop-base.deb
 
 .PHONY	: test
 test	:
-	@cp ${SCRIPT_PATH}/pd_check       ${SCRIPT_DEST}
-	@cp ${SCRIPT_PATH}/pd_clonessd    ${SCRIPT_DEST}
-	@cp ${SCRIPT_PATH}/__init__.py    ${SCRIPT_DEST}
-	@cp ${SCRIPT_PATH}/pidesktop.py   ${SCRIPT_DEST}
-	@cp ${SCRIPT_PATH}/pd_rtcsync     ${SCRIPT_DEST}
+#       Service scripts
+	@cp ${SCRIPT_PATH}/pd-check       ${SCRIPT_DEST}
+	@cp ${SCRIPT_PATH}/pd-clonessd    ${SCRIPT_DEST}
+	@cp ${SCRIPT_PATH}/pd-rtcsync     ${SCRIPT_DEST}
+#       Python code
+	@cp ${PYTHON_PATH}/__init__.py    ${PYTHON_DEST}
+	@cp ${PYTHON_PATH}/pidesktop.py   ${PYTHON_DEST}
 	@cp ${PYTHON_PATH}/pd_bootssd.py  ${PYTHON_DEST}
 	@cp ${PYTHON_PATH}/pd_fixrtc.py   ${PYTHON_DEST}
 	@cp ${PYTHON_PATH}/pd_powerkey.py ${PYTHON_DEST}
