@@ -42,8 +42,9 @@ test	:
 	@install -m 775 ${SCRIPT_PATH}/pd-clonessd    ${SCRIPT_DEST}
 	@install -m 775 ${SCRIPT_PATH}/pd-rtcsync     ${SCRIPT_DEST}
 #       Python code
-	@install -m 775 ${PYTHON_PATH}/__init__.py    ${PYTHON_DEST}
-	@install -m 775 ${PYTHON_PATH}/pidesktop.py   ${PYTHON_DEST}
+	@install -m 664 ${PYTHON_PATH}/__init__.py    ${PYTHON_DEST}
+	@install -m 664 ${PYTHON_PATH}/logger.py      ${PYTHON_DEST}
+	@install -m 664 ${PYTHON_PATH}/pidesktop.py   ${PYTHON_DEST}
 	@install -m 775 ${PYTHON_PATH}/pd_bootssd.py  ${PYTHON_DEST}
 	@install -m 775 ${PYTHON_PATH}/pd_fixrtc.py   ${PYTHON_DEST}
 	@install -m 775 ${PYTHON_PATH}/pd_powerkey.py ${PYTHON_DEST}

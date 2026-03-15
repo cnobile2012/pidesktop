@@ -13,20 +13,16 @@ import time
 import RPi.GPIO as GPIO
 from subprocess import run as sp_run, Popen, PIPE
 
-PWD = os.path.abspath(__file__)
-BASE_DIR = os.path.dirname(PWD)
-sys.path.append(BASE_DIR)
-
-from . import Logger
+from logger import Logger
 
 
-class PiDesktop(Logger):
+class PiDesktop:
     """
     Support for the Desktop Case supporting software sold by
     http://www.element14.com.
     """
     _LOGGER_NAME = 'pidesktop'
-    _LOG_PATH = '/var/log'
+    _LOG_PATH = os.path.join('/var/log', _LOGGER_NAME)
     _BOOT_CONF_FILE = '/boot/config.txt'
 
     PIN_KEY = 'gpio'
@@ -218,7 +214,8 @@ class PiDesktop(Logger):
         GPIO.setwarnings(False)
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(31, GPIO.OUT)    # Pi to PCU - start/stop shutdown timer
-        GPIO.setup(33, GPIO.IN)     # PCU to Pi - detect power key pressed
+        # PCU to Pi - detect power key pressed
+        GPIO.setup(33, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
         GPIO.output(31, GPIO.LOW)   # tell PCU we are alive
         GPIO.output(31, GPIO.HIGH)  # cause blink by starting shutdown timer
@@ -227,7 +224,9 @@ class PiDesktop(Logger):
 
         # wait for power key press
         print("pidesktop: power button monitor enabled")
-        GPIO.add_event_detect(33, GPIO.RISING, callback=powerkey_pressed)
+        GPIO.remove_event_detect(33)   # Clear any existing detection first
+        GPIO.add_event_detect(33, GPIO.RISING, callback=powerkey_pressed,
+                              bouncetime=200)
 
         # idle - TODO: use wait
         while True:

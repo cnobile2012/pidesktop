@@ -6,4 +6,4 @@ exclude =
     dist
 
 per-file-ignores =
-    pidesktop-base/usr/share/pidesktop/python/*: E129
+    pidesktop-base/usr/share/pidesktop/python/*: E129,E402

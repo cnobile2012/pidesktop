@@ -11,15 +11,15 @@ PWD = os.path.abspath(__file__)
 BASE_DIR = os.path.dirname(PWD)
 sys.path.append(BASE_DIR)
 
-from . import Logger
+from logger import Logger
 
 
-class BootSSDManager(Logger):
+class BootSSDManager:
     """
     Boot the ssd.
     """
     _LOGGER_NAME = 'pidesktop'
-    _LOG_PATH = '/var/log'
+    _LOG_PATH = os.path.join('/var/log', _LOGGER_NAME)
 
     def __init__(self):
         Logger().config(logger_name=self._LOGGER_NAME,
