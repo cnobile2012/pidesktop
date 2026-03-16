@@ -189,7 +189,7 @@ class PiDesktop:
             os.system("shutdown -h now")
             sys.exit()
 
-        print("pidesktop: power button service initializing")
+        self._log.info("pidesktop: power button service initializing")
         h = lgpio.gpiochip_open(0)
 
         # Pi to PCU - start/stop shutdown timer (BOARD 31 = BCM 6)
@@ -205,7 +205,7 @@ class PiDesktop:
         lgpio.gpio_write(h, 6, 0)   # LOW - clear timer, we're alive
 
         # Wait for power key press
-        print("pidesktop: power button monitor enabled")
+        self._log.info("pidesktop: power button monitor enabled")
         lgpio.gpio_claim_alert(h, 13, lgpio.RISING_EDGE)
         cb = lgpio.callback(h, 13, lgpio.RISING_EDGE, powerkey_pressed)
 
@@ -226,9 +226,6 @@ class PiDesktop:
                            "button detected")
         else:
             # reboot initiated, do whatever is needed on reboot
-            #lgpio.gpio_write(h, 6, 1)  # tell power MCU and exit immediately
-            #time.sleep(2.0)            # hold HIGH so PCU registers it
-            #lgpio.gpio_write(h, 6, 0)  # release
             self._log.info("pidesktop: reboot service active")
 
         # we're done
