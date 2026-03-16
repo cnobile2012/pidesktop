@@ -10,7 +10,7 @@ import shlex
 import sys
 import time
 
-import RPi.GPIO as GPIO
+import lgpio
 from subprocess import run as sp_run, Popen, PIPE
 
 from logger import Logger
@@ -22,8 +22,8 @@ class PiDesktop:
     http://www.element14.com.
     """
     _LOGGER_NAME = 'pidesktop'
-    _LOG_PATH = os.path.join('/var/log', _LOGGER_NAME)
-    _BOOT_CONF_FILE = '/boot/config.txt'
+    _LOG_PATH = os.path.join('/var/log', _LOGGER_NAME + '.log')
+    _BOOT_CONF_FILE = '/boot/firmware/config.txt'
 
     PIN_KEY = 'gpio'
     CONF_KEY = 'dtoverlay'
@@ -85,8 +85,6 @@ class PiDesktop:
             if not update == 1:
                 if update == 0:
                     new_value += f"\r\n{key}={value}"
-
-                self._log.info("new_value: %s", new_value)
 
                 with open(self._BOOT_CONF_FILE, 'w') as fw:
                     fw.write(new_value)
@@ -183,22 +181,23 @@ class PiDesktop:
         self.run_command(command)
 
     def reboot(self):
-        GPIO.setwarnings(False)
-        GPIO.setmode(GPIO.BOARD)  # Use physical board pin numbering
-        GPIO.setup(31, GPIO.OUT)  # Pi to Power MCU communication
-        GPIO.setup(33, GPIO.IN)   # Power MCU to Pi on power button
+        h = lgpio.gpiochip_open(0)
+        lgpio.gpio_claim_output(h, 6)
+        lgpio.gpio_claim_input(h, 13)
 
-        # In practice detecting power button press is unfortunately not
+        # In practice, detecting the power button press is unfortunately not
         # reliable, message if detected
-        if GPIO.input(33):
+        if lgpio.gpio_read(h, 13):
             # Power Key was already pressed - shut the system down immediately
-            print("pidesktop: reboot service unexpected power button detected")
+            self._log.info("pidesktop: reboot service unexpected power "
+                           "button detected")
         else:
-            # reboot initiated do whatever is needed on reboot
-            # GPIO.output(31,GPIO.HIGH)  # tell power MCU and exit immediately
+            # reboot initiated, do whatever is needed on reboot
+            lgpio.gpio_write(h, 6, 1)  # tell power MCU and exit immediately
             self._log.info("pidesktop: reboot service active")
 
         # we're done
+        lgpio.gpiochip_close(h)
         self._log.info("pidesktop: reboot service completed")
 
     def power_key(self):
@@ -211,45 +210,49 @@ class PiDesktop:
             sys.exit()
 
         print("pidesktop: power button service initializing")
-        GPIO.setwarnings(False)
-        GPIO.setmode(GPIO.BOARD)
-        GPIO.setup(31, GPIO.OUT)    # Pi to PCU - start/stop shutdown timer
-        # PCU to Pi - detect power key pressed
-        GPIO.setup(33, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+        h = lgpio.gpiochip_open(0)
 
-        GPIO.output(31, GPIO.LOW)   # tell PCU we are alive
-        GPIO.output(31, GPIO.HIGH)  # cause blink by starting shutdown timer
+        # Pi to PCU - start/stop shutdown timer (BOARD 31 = BCM 6)
+        lgpio.gpio_claim_output(h, 6, lgpio.LOW)
+
+        # PCU to Pi - detect power key pressed (BOARD 33 = BCM 13)
+        lgpio.gpio_claim_input(h, 13, lgpio.SET_PULL_DOWN)
+
+        # Tell PCU we are alive
+        lgpio.gpio_write(h, 6, 0)   # LOW
+        lgpio.gpio_write(h, 6, 1)   # HIGH - blink/start shutdown timer
         time.sleep(0.5)
-        GPIO.output(31, GPIO.LOW)   # clear timer we really are alive
+        lgpio.gpio_write(h, 6, 0)   # LOW - clear timer, we're alive
 
-        # wait for power key press
+        # Wait for power key press
         print("pidesktop: power button monitor enabled")
-        GPIO.remove_event_detect(33)   # Clear any existing detection first
-        GPIO.add_event_detect(33, GPIO.RISING, callback=powerkey_pressed,
-                              bouncetime=200)
+        lgpio.gpio_claim_alert(h, 13, lgpio.RISING_EDGE)
+        cb = lgpio.callback(h, 13, lgpio.RISING_EDGE, powerkey_pressed)
 
-        # idle - TODO: use wait
+        # Idle
         while True:
             time.sleep(10)
 
     def shutdown(self):
-        GPIO.setwarnings(False)
-        GPIO.setmode(GPIO.BOARD)  # Use physical board pin numbering
-        GPIO.setup(31, GPIO.OUT)  # Pi to Power MCU communication
-        GPIO.setup(33, GPIO.IN)   # Power MCU to Pi on power button
+        h = lgpio.gpiochip_open(0)
+
+        # Pi to Power MCU communication (BOARD 31 = BCM 6)
+        lgpio.gpio_claim_output(h, 6)
+        # Power MCU to Pi on power button (BOARD 33 = BCM 13)
+        lgpio.gpio_claim_input(h, 13)
 
         # In practice detecting power button press is unfortunately not
         # reliable, message if detected
-        if GPIO.input(33):
+        if lgpio.gpio_read(h, 13):
             # Power Key was already pressed - shut the system down immediately
             self._log.info("pidesktop: shutdown service initated from "
                            "power button")
         else:
-            # shutdown or reboot not related to power key
-            # GPIO.output(31,GPIO.HIGH) #  tell power MCU and exit immediately
+            # shutdown or reboot not related to the power key
+            # lgpio.gpio_write(h, 6, 1)  # tell power MCU and exit immediately
             self._log.info("pidesktop: shutdown service active")
 
-        #  unmount SD card to clean up logs
+        # unmount SD card to clean up logs
         if os.path.exists('/dev/mmcblk0p1'):
             self._log.info("pidesktop: shutdown service unmounting SD card")
             os.system("umount /dev/mmcblk0p1")
@@ -261,4 +264,5 @@ class PiDesktop:
             os.system("/sbin/hwclock --systohc")
 
         # we're done
+        lgpio.gpiochip_close(h)
         self._log.info("pidesktop: shutdown service completed")

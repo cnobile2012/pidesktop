@@ -18,8 +18,8 @@ class BootSSDManager:
     """
     Boot the ssd.
     """
-    _LOGGER_NAME = 'pidesktop'
-    _LOG_PATH = os.path.join('/var/log', _LOGGER_NAME)
+    _LOGGER_NAME = 'pidesktop-bootmanager'
+    _LOG_PATH = os.path.join('/var/log', _LOGGER_NAME + '.log')
 
     def __init__(self):
         Logger().config(logger_name=self._LOGGER_NAME,

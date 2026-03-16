@@ -19,7 +19,7 @@ PWD = os.path.abspath(__file__)
 BASE_DIR = os.path.dirname(PWD)
 sys.path.append(BASE_DIR)
 
-from .pidesktop import PiDesktop
+from pidesktop import PiDesktop
 
 
 if __name__ == "__main__":

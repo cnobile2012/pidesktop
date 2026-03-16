@@ -1,4 +1,4 @@
+lgpio
 pip
 ipython
-RPi.GPIO
 flake8
