@@ -2,6 +2,7 @@
 Description=pidesktop Shutdown Service
 DefaultDependencies=no
 Before=shutdown.target
+Conflicts=reboot.target
 
 [Service]
 Type=oneshot

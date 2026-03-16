@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 #
 # pd_shutdown.py - oneshot service so do your thing and exit

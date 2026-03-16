@@ -48,9 +48,9 @@ test	:
 	@install -m 755 ${PYTHON_PATH}/pd_bootssd.py  ${PYTHON_DEST}
 	@install -m 755 ${PYTHON_PATH}/pd_clonessd.py ${PYTHON_DEST}
 	@install -m 755 ${PYTHON_PATH}/pd_fixrtc.py   ${PYTHON_DEST}
-	@install -m 755 ${PYTHON_PATH}/pd_powerkey.py ${PYTHON_DEST}
-	@install -m 755 ${PYTHON_PATH}/pd_reboot.py   ${PYTHON_DEST}
-	@install -m 755 ${PYTHON_PATH}/pd_shutdown.py ${PYTHON_DEST}
+	@install -m 644 ${PYTHON_PATH}/pd_powerkey.py ${PYTHON_DEST}
+	@install -m 644 ${PYTHON_PATH}/pd_reboot.py   ${PYTHON_DEST}
+	@install -m 644 ${PYTHON_PATH}/pd_shutdown.py ${PYTHON_DEST}
 
 .PHONY	: remove_test
 remove_test:
