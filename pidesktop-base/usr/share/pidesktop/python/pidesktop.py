@@ -9,8 +9,8 @@ import os
 import shlex
 import sys
 import time
-
 import lgpio
+
 from subprocess import run as sp_run, Popen, PIPE
 
 from logger import Logger
