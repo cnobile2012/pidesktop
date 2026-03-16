@@ -180,26 +180,6 @@ class PiDesktop:
         self._log.info(message)
         self.run_command(command)
 
-    def reboot(self):
-        h = lgpio.gpiochip_open(0)
-        lgpio.gpio_claim_output(h, 6)
-        lgpio.gpio_claim_input(h, 13)
-
-        # In practice, detecting the power button press is unfortunately not
-        # reliable, message if detected
-        if lgpio.gpio_read(h, 13):
-            # Power Key was already pressed - shut the system down immediately
-            self._log.info("pidesktop: reboot service unexpected power "
-                           "button detected")
-        else:
-            # reboot initiated, do whatever is needed on reboot
-            lgpio.gpio_write(h, 6, 1)  # tell power MCU and exit immediately
-            self._log.info("pidesktop: reboot service active")
-
-        # we're done
-        lgpio.gpiochip_close(h)
-        self._log.info("pidesktop: reboot service completed")
-
     def power_key(self):
         # callback function
         def powerkey_pressed(channels):
@@ -232,6 +212,28 @@ class PiDesktop:
         # Idle
         while True:
             time.sleep(10)
+
+    def reboot(self):
+        h = lgpio.gpiochip_open(0)
+        lgpio.gpio_claim_output(h, 6)
+        lgpio.gpio_claim_input(h, 13)
+
+        # In practice, detecting the power button press is unfortunately not
+        # reliable, message if detected
+        if lgpio.gpio_read(h, 13):
+            # Power Key was already pressed - shut the system down immediately
+            self._log.info("pidesktop: reboot service unexpected power "
+                           "button detected")
+        else:
+            # reboot initiated, do whatever is needed on reboot
+            #lgpio.gpio_write(h, 6, 1)  # tell power MCU and exit immediately
+            #time.sleep(2.0)            # hold HIGH so PCU registers it
+            #lgpio.gpio_write(h, 6, 0)  # release
+            self._log.info("pidesktop: reboot service active")
+
+        # we're done
+        lgpio.gpiochip_close(h)
+        self._log.info("pidesktop: reboot service completed")
 
     def shutdown(self):
         h = lgpio.gpiochip_open(0)

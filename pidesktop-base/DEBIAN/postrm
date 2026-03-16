@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # files are cleaned up by package manager, but broken links need to be cleared
-sudo rm -f /usr/bin/pd-check
-sudo rm -f /usr/bin/pd-clonessd
-sudo rm -f /usr/bin/pd-bootssd
-sudo rm -f /usr/bin/pd-fixrtc
+sudo rm -f /usr/bin/pd_check
+sudo rm -f /usr/bin/pd_clonessd
+sudo rm -f /usr/bin/pd_bootssd
+sudo rm -f /usr/bin/pd_fixrtc
 
 # stop systemd services
 sudo systemctl stop pidesktop-powerkey.service
