@@ -207,7 +207,7 @@ class PiDesktop:
         # Wait for power key press
         self._log.info("pidesktop: power button monitor enabled")
         lgpio.gpio_claim_alert(h, 13, lgpio.RISING_EDGE)
-        cb = lgpio.callback(h, 13, lgpio.RISING_EDGE, powerkey_pressed)
+        lgpio.callback(h, 13, lgpio.RISING_EDGE, powerkey_pressed)
 
         # Idle
         while True:
